@@ -1,12 +1,18 @@
 require 'test_helper'
 
 class SongsControllerTest < ActionController::TestCase
+  setup do
+    Song.delete_all
+  end
+
   test "index renders the correct template" do
     get :index
     assert_template :index
   end
 
   test "show renders the correct template" do
+    post :create, :song => { :artist => "Testy", :title => "The Test" }
+
     get :show, :id => 1
     assert_template :show
   end

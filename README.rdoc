@@ -1,28 +1,47 @@
-== README
+== Derp
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+În repository-ul ăsta aveți o aplicatie relativ stock de rails.
 
-Things you may want to cover:
+Am pus o serie de teste pe acolo, scopul este să le faceți să treacă.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+De acolo, mai aveți și niște chestii in plus pe care puteți să le faceți
+dacă vi se par fun.
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+O să presupun că aveți ruby si toate șmecheriile aferente.
+De acolo, un 
+
+<tt>bundle install</tt>
+
+ar trebui să vă instaleze bălăriile de care aveți nevoie.
+
+
+Ca să rulați aplicația, 
+
+<tt>rails s</tt>
+
+
+După, rulăm teste.
+
+În rails, avand in vedere că avem nevoie de framework si o gârlă de 
+alte chestii, o sa rulăm testele cu rake.
+
+<tt>rake test:models</tt> ruleaza unit tests, <tt>rake test:controllers</tt> ruleaza testele
+functionale.
+
+Practic ne pasă că dacă vrem sa treaca <tt>rake test:models</tt> o să modificăm chestii
+in app/models/song.rb, și dacă vrem să treaca <tt>rake test:controllers</tt>, 
+dacă deja trec testele de model, putem să lucrăm doar cu app/controllers/songs_controller.rb.
+Ok, cu alea și cu config/routes.rb, dar ăla nu se pune.
+
+
+Deci, cam astea sunt testele, vedeti ce puteți să faceți din ele.
+
+
+Extra credit, încercați să faceți o pagină care să conțină topul celor mai ascultate melodii.
+
+Extra Extra credit, încercați să faceți o pagină care să conțină lista de artiști,
+și fiecare artist sa aiba un link la altă pagină, unde sa fie o listă cu cântecele lor
+
+
+Dacă nu vă prindeți de ceva, dați-mi un mesaj, sau luați-mă de mânecă la curs.
