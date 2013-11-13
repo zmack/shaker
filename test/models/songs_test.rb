@@ -50,6 +50,19 @@ class SongsTest < ActiveSupport::TestCase
     assert Song.respond_to?(:all)
   end
 
+  test "there should be a delete_all method that erases all songs" do
+    assert Song.respond_to?(:delete_all)
+    Song.delete_all
+
+    assert_empty Song.all
+  end
+end
+
+class SongWithDeleteAllMethod < ActiveSupport::TestCase
+  setup do
+    Song.delete_all
+  end
+
   test "a song can be saved" do
     assert Song.all.empty?, "there should be no songs present"
 
@@ -74,7 +87,7 @@ class SongsTest < ActiveSupport::TestCase
   test "a song with no num gets assigned one" do
     assert Song.all.empty?, "there should be no songs present"
 
-    song = Song.new({ :artist => "Foo", :title => "Bar" })
+    song = Song.new({ 'artist' => "Foo", 'title' => "Bar" })
     song.save
 
     assert_equal 1, song.num
@@ -84,13 +97,13 @@ class SongsTest < ActiveSupport::TestCase
   test "saving a song with the same num overrides the old one" do
     assert Song.all.empty?, "there should be no songs present"
 
-    song = Song.new({ :artist => "Foo", :title => "Bar" })
+    song = Song.new({ 'artist' => "Foo", 'title' => "Bar" })
     song.save
 
     assert_equal 1, song.num
     assert_equal 1, Song.all.length
 
-    song = Song.new({ :num => 1, :artist => "Bar", :title => "Bar" })
+    song = Song.new({ 'num' => 1, 'artist' => "Bar", 'title' => "Bar" })
     song.save
 
     assert_equal 1, song.num
@@ -99,26 +112,41 @@ class SongsTest < ActiveSupport::TestCase
     found_song = Song.find_by_num(1)
     assert_equal "Bar", found_song.artist
   end
+
+  test "songs comes with a method that imports more songs from a hash array" do
+    assert Song.all.empty?, "there should be no songs present"
+    assert Song.respond_to?(:load_from_hash_array), "should have .load_from_hash_array method"
+
+    hash_array = 5.times.map do |i|
+      { 'artist' => "Foo #{i}", 'title' => "Bar #{i}", 'playcount' => "5" }
+    end
+
+    Song.load_from_hash_array(hash_array)
+    assert_equal 5, Song.all.length
+    assert_equal [0,1,2,3,4], Song.all.map { |s| s.artist.reverse.to_i }
+  end
 end
 
 
 class SongsGroupingTest < ActiveSupport::TestCase
   setup do
-    Song.new({ :artist => "Foo", :title => "Bar", :playcount => "5" }).save
-    Song.new({ :artist => "Foo", :title => "Bar 1", :playcount => "6" }).save
-    Song.new({ :artist => "Baz", :title => "Bar", :playcount => "15" }).save
-    Song.new({ :artist => "Baz", :title => "Bar 1", :playcount => "14" }).save
-    Song.new({ :artist => "Baz", :title => "Bar 2", :playcount => "20" }).save
+    Song.delete_all
+
+    Song.new({ 'artist' => "Foo", 'title' => "Bar", 'playcount' => "5" }).save
+    Song.new({ 'artist' => "Foo", 'title' => "Bar 1", 'playcount' => "6" }).save
+    Song.new({ 'artist' => "Baz", 'title' => "Bar", 'playcount' => "15" }).save
+    Song.new({ 'artist' => "Baz", 'title' => "Bar 1", 'playcount' => "14" }).save
+    Song.new({ 'artist' => "Baz", 'title' => "Bar 2", 'playcount' => "20" }).save
   end
 
   test "find_by_artist can find all songs by an artist" do
     assert_equal 2, Song.find_by_artist("Foo").length
-    assert_equal 3, Song.find_by_artist("Bar").length
+    assert_equal 3, Song.find_by_artist("Baz").length
   end
 
   test "can find a certain track" do
     song = Song.find_by_artist_and_title("Foo", "Bar 1")
-    assert_equal 4, song.num
+    assert_equal 2, song.num
   end
 
   test "can return top played" do

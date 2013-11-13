@@ -7,7 +7,7 @@ class SongsControllerTest < ActionController::TestCase
   end
 
   test "show renders the correct template" do
-    get :show
+    get :show, :id => 1
     assert_template :show
   end
 
@@ -21,14 +21,25 @@ class SongsControllerTest < ActionController::TestCase
     assert_template :new
   end
 
+  test "adding a new song actually creates it" do
+    post :create, :song => { :artist => "Testy", :title => "The Test" }
 
-  test "the secret page requires authentication" do
-    get :secret
-    assert_response :unauthorized
+    assert_equal 1, Song.all.length
+    song = Song.all.last
 
-    @request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.encode_credentials('admin', 'secret')
-    get :secret
+    assert_equal "Testy", song.artist
+    assert_equal "The Test", song.title
+  end
 
-    assert_response :ok
+  test "updating a song actually updates it" do
+    Song.new({ :num => 1, :artist => "Fooby", :title => "Barsy" })
+
+    post :update, :id => 1, :song => { :artist => "Testy", :title => "The Test" }
+
+    assert_equal 1, Song.all.length
+    song = Song.all.last
+
+    assert_equal "Testy", song.artist
+    assert_equal "The Test", song.title
   end
 end

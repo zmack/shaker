@@ -1,0 +1,6 @@
+<h1>All these songs</h1>
+<ul class="list">
+  <%- @songs.each do |song| -%>
+    <li><%= song.title %></li>
+  <%- end -%>
+</ul>
