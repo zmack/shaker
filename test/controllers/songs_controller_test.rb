@@ -38,7 +38,8 @@ class SongsControllerTest < ActionController::TestCase
   end
 
   test "updating a song actually updates it" do
-    Song.new({ :num => 1, :artist => "Fooby", :title => "Barsy" })
+    s = Song.new({ :num => 1, :artist => "Fooby", :title => "Barsy" })
+    s.save
 
     post :update, :id => 1, :song => { :artist => "Testy", :title => "The Test" }
 

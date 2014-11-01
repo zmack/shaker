@@ -145,8 +145,8 @@ class SongsGroupingTest < ActiveSupport::TestCase
   end
 
   test "can find a certain track" do
-    song = Song.find_by_artist_and_title("Foo", "Bar 1")
-    assert_equal 2, song.num
+    songs = Song.find_by_artist_and_title("Foo", "Bar 1")
+    assert_equal [2], songs.map(&:num)
   end
 
   test "can return top played" do
